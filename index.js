@@ -49,3 +49,7 @@ function processWeatherData(weatherData) {
     city
   };
 }
+
+function convertToCelsius(f) {
+  return Math.round((parseInt(f) - 32) * (5/9));
+}
