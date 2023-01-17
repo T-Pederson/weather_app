@@ -53,3 +53,5 @@ function processWeatherData(weatherData) {
 function convertToCelsius(f) {
   return Math.round((parseInt(f) - 32) * (5/9));
 }
+
+// function updateDisplay(weatherData) {}
