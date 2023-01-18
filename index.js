@@ -12,33 +12,38 @@ input.addEventListener('keydown', (e) => {
 
 async function main() {
   const city = document.getElementById('city').value;
-  const units = 'imperial';
-  const geocoding = await getGeocoding(city, apiKey);
-  let weatherData = await getWeatherData(geocoding, units, apiKey);
+  const state = document.getElementById('state').value;
+  let country = document.getElementById('country').value;
+  const geocoding = await getGeocoding(city, state, country, apiKey);
+  country = geocoding.country;
+  let weatherData = await getWeatherData(geocoding, apiKey);
   weatherData = processWeatherData(weatherData);
+  weatherTypeGif(weatherData.weatherType);
   console.log(weatherData);
 }
 
-async function getGeocoding(city, apiKey) {
-  let r = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${apiKey}`);
+async function getGeocoding(city, state, country, apiKey) {
+  let r = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&appid=${apiKey}`);
   r = await r.json();
+  console.log(r);
   return {
     lat: r[0].lat,
     lon: r[0].lon,
+    country: r[0].country
   };
 }
 
-async function getWeatherData(geocoding, units, apiKey) {
+async function getWeatherData(geocoding, apiKey) {
   const lat = geocoding.lat;
   const lon = geocoding.lon;
-  r = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${apiKey}`);
+  r = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`);
   return await r.json();
 }
 
 function processWeatherData(weatherData) {
-  weatherType = weatherData.weather[0].description;
-  temp = weatherData.main.temp;
-  feelsLike = weatherData.main.feels_like;
+  weatherType = weatherData.weather[0].main;
+  temp = Math.round(weatherData.main.temp);
+  feelsLike = Math.round(weatherData.main.feels_like);
   humidity = weatherData.main.humidity;
   city = weatherData.name;
   return {
@@ -55,3 +60,4 @@ function convertToCelsius(f) {
 }
 
 // function updateDisplay(weatherData) {}
+
