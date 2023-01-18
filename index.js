@@ -56,11 +56,11 @@ async function getWeatherData(geocoding) {
 
 function updateDisplay(geocoding, weatherData) {
   document.querySelector('.weather').style.display = 'inline-block';
-  document.querySelector('.temp').textContent = `Temp: ${weatherData.temp}°F`;
-  document.querySelector('.feelsLike').textContent = `Feels Like: ${weatherData.feelsLike}°F`;
+  document.querySelector('.temp').textContent = `Temp: ${weatherData.temp}°`;
+  document.querySelector('.feelsLike').textContent = `Feels Like: ${weatherData.feelsLike}°`;
   document.querySelector('.humidity').textContent = `Humidity: ${weatherData.humidity}%`;
   const location = document.querySelector('.location');
-  if (geocoding.state === '') {
+  if (geocoding.country !== 'US') {
     location.textContent = `${geocoding.city}, ${geocoding.country}`;
   } else {
     location.textContent = `${geocoding.city}, ${geocoding.state} ${geocoding.country}`;
