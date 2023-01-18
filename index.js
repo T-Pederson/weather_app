@@ -1,6 +1,7 @@
 const apiKey = 'ef3d247a1b61d1160024768943d53ab9';
 const search = document.getElementById('search');
 const input = document.getElementById('city');
+const unitToggle = document.getElementById('units');
 search.addEventListener('click', main);
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter'){
@@ -8,6 +9,7 @@ input.addEventListener('keydown', (e) => {
     main();
   }
 });
+unitToggle.addEventListener('click', main);
 
 async function main() {
   try {
@@ -36,7 +38,13 @@ async function getGeocoding() {
 }
 
 async function getWeatherData(geocoding) {
-  let r = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geocoding.lat}&lon=${geocoding.lon}&units=imperial&appid=${apiKey}`);
+  let units;
+  if (document.getElementById('units').checked) {
+    units = 'metric';
+  } else {
+    units = 'imperial';
+  }
+  let r = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geocoding.lat}&lon=${geocoding.lon}&units=${units}&appid=${apiKey}`);
   r = await r.json();
   return {
     weatherType: r.weather[0].main,
@@ -87,8 +95,4 @@ function updateDisplay(geocoding, weatherData) {
       weatherType.src = 'images/cloudy.svg';
       break;
   }
-}
-
-function convertToCelsius(f) {
-  return Math.round((parseInt(f) - 32) * (5/9));
 }
