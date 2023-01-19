@@ -45,21 +45,29 @@ async function getWeatherData(geocoding, units) {
     weatherDescription: r.weather[0].description,
     temp: Math.round(r.main.temp),
     feelsLike: Math.round(r.main.feels_like),
-    humidity: r.main.humidity
+    humidity: r.main.humidity,
+    windSpeed: r.wind.speed
   }
 }
 
 function updateDisplay(geocoding, weatherData, units) {
   document.querySelector('.weather').style.display = 'inline-block';
+  let tempUnits;
+  let speedUnits;
   if (units === 'imperial') {
-    units = 'F';
+    tempUnits = 'F';
+    speedUnits = 'mph';
+    weatherData.windSpeed = Math.round(weatherData.windSpeed);
   } else {
-    units = 'C';
+    tempUnits = 'C';
+    speedUnits = 'km/h'
+    weatherData.windSpeed = Math.round(weatherData.windSpeed * 3.6);
   }
   document.querySelector('.weatherDescription').textContent = weatherData.weatherDescription;
-  document.querySelector('.temp').textContent = `${weatherData.temp}°${units}`;
-  document.querySelector('.feelsLike').textContent = `Feels Like: ${weatherData.feelsLike}°${units}`;
-  document.querySelector('.humidity').textContent = `Humidity: ${weatherData.humidity}%`;
+  document.querySelector('.temp').textContent = `${weatherData.temp} °${tempUnits}`;
+  document.querySelector('.feelsLike').textContent = `Feels Like ${weatherData.feelsLike} °${tempUnits}`;
+  document.querySelector('.humidity').textContent = `Humidity ${weatherData.humidity}%`;
+  document.querySelector('.windSpeed').textContent = `Wind Speed ${weatherData.windSpeed} ${speedUnits}`
   const location = document.querySelector('.location');
   if (geocoding.country !== 'US') {
     location.textContent = `${geocoding.city}, ${geocoding.country}`;
@@ -67,34 +75,18 @@ function updateDisplay(geocoding, weatherData, units) {
     location.textContent = `${geocoding.city}, ${geocoding.state}, ${geocoding.country}`;
   }
   const weatherType = document.querySelector('.weatherType');
-  switch(weatherData.weatherType) {
-    case 'Thunderstorm':
-    case 'Tornado':
-      weatherType.src = 'images/thunderstorm.svg';
-      break;
-    case 'Drizzle':
-    case 'Rain':
-      weatherType.src = 'images/rainy.svg';
-      break;
-    case 'Snow':
-      weatherType.src = 'images/snow.svg';
-      break;
-    case 'Mist':
-    case 'Smoke':
-    case 'Haze':
-    case 'Fog':
-    case 'Sand':
-    case 'Dust':
-    case 'Ash':
-    case 'Squall':
-      weatherType.src = 'images/foggy.svg';
-      break;
-    case 'Clear':
-      weatherType.src = 'images/sunny.svg';
-      break;
-    case 'Clouds':
-      weatherType.src = 'images/cloudy.svg';
-      break;
+  if (['Thunderstorm','Tornado'].includes(weatherData.weatherType)) {
+    weatherType.src = 'images/thunderstorm.svg';
+  } else if (['Drizzle','Rain'].includes(weatherData.weatherType)){
+    weatherType.src = 'images/rainy.svg';
+  } else if ('Snow' === weatherData.weatherType){
+    weatherType.src = 'images/snow.svg';
+  } else if ('Clouds' === weatherData.weatherType){
+    weatherType.src = 'images/cloudy.svg';
+  } else if ('Clear' === weatherData.weatherType) {
+    weatherType.src = 'images/sunny.svg';
+  } else {
+    weatherType.src = 'images/foggy.svg';
   }
 }
 

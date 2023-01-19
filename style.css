@@ -1,6 +1,7 @@
 * {
   margin: 0;
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -37,9 +38,12 @@ input::placeholder, a {
 }
 
 #errorMessage {
-  width: 200px;
-  font-size: 0.8em;
+  width: 230px;
   display: none;
+}
+
+#errorMessage, #units {
+  font-size: 0.8em;
 }
 
 #footer {
