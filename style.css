@@ -34,7 +34,6 @@ input::placeholder, a {
 
 .weather {
   width: 200px;
-  display: none;
 }
 
 #errorMessage {

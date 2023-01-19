@@ -1,17 +1,21 @@
+// Set up global variables and event listeners
 const apiKey = 'ef3d247a1b61d1160024768943d53ab9';
 const errorMessage = document.getElementById('errorMessage');
-const input = document.getElementById('city');
+const input = document.getElementById('location');
 const unitToggle = document.getElementById('units');
+unitToggle.addEventListener('click', toggleUnits);
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter'){
-    input.blur();
     main(input.value);
+    input.blur();
     input.value = '';
   }
 });
-unitToggle.addEventListener('click', toggleUnits);
+
+// Run a search for Las Vegas on initial page load
 main('Las Vegas, Nevada, US');
 
+// Main function to carry out searching and displaying weather info
 async function main(location) {
   try {
     const units = document.getElementById('units').className;
@@ -21,10 +25,10 @@ async function main(location) {
     errorMessage.style.display = 'none';
   } catch(error) {
     errorMessage.style.display = 'inline-block';
-    return;
   }
 }
 
+// Get location information via geocoding api
 async function getGeocoding(location) {
   let r = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=${apiKey}`);
   r = await r.json();
@@ -37,6 +41,7 @@ async function getGeocoding(location) {
   }
 }
 
+// Get weather information via current weather api
 async function getWeatherData(geocoding, units) {
   let r = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geocoding.lat}&lon=${geocoding.lon}&units=${units}&appid=${apiKey}`);
   r = await r.json();
@@ -50,8 +55,9 @@ async function getWeatherData(geocoding, units) {
   }
 }
 
+// Update all DOM elements given the location and weather information from api requests
 function updateDisplay(geocoding, weatherData, units) {
-  document.querySelector('.weather').style.display = 'inline-block';
+  // Set up variables for units
   let tempUnits;
   let speedUnits;
   if (units === 'imperial') {
@@ -63,6 +69,7 @@ function updateDisplay(geocoding, weatherData, units) {
     speedUnits = 'km/h'
     weatherData.windSpeed = Math.round(weatherData.windSpeed * 3.6);
   }
+  // Update DOM elements
   document.querySelector('.weatherDescription').textContent = weatherData.weatherDescription;
   document.querySelector('.temp').textContent = `${weatherData.temp} °${tempUnits}`;
   document.querySelector('.feelsLike').textContent = `Feels Like ${weatherData.feelsLike} °${tempUnits}`;
@@ -90,6 +97,7 @@ function updateDisplay(geocoding, weatherData, units) {
   }
 }
 
+// Toggle between imperial and metric units
 function toggleUnits() {
   const units = document.getElementById('units');
   if (units.className ==='imperial') {

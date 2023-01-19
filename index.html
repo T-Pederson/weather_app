@@ -9,13 +9,13 @@
   <script src="index.js" defer></script>
 </head>
 <body>
-  <input type="text" name="city" id="city" placeholder="Search Location..." required autocomplete="off">
+  <input type="text" name="location" id="location" placeholder="Search Location..." required autocomplete="off">
   <div id="errorMessage">
     <p>Location not found.</p>
     <p>Please search "City", "City, Country", or "City, State, US"</p>
   </div>
   <div class="weather">
-    <img src="" alt="Weather Type" class="weatherType">
+    <img src="" alt="Weather Type" class="weatherType" onerror="this.style.display = 'none'">
     <p class="weatherDescription"></p>
     <p class="temp"></p>
     <p class="feelsLike"></p>
