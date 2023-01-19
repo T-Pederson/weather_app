@@ -1,32 +1,32 @@
 const apiKey = 'ef3d247a1b61d1160024768943d53ab9';
-const search = document.getElementById('search');
+const errorMessage = document.getElementById('errorMessage');
 const input = document.getElementById('city');
 const unitToggle = document.getElementById('units');
-search.addEventListener('click', main);
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter'){
     input.blur();
-    main();
+    main(input.value);
+    input.value = '';
   }
 });
-unitToggle.addEventListener('click', main);
+unitToggle.addEventListener('click', toggleUnits);
+main('Las Vegas, Nevada, US');
 
-async function main() {
+async function main(location) {
   try {
-    const geocoding = await getGeocoding();
-    const weatherData = await getWeatherData(geocoding);
-    updateDisplay(geocoding, weatherData);
+    const units = document.getElementById('units').className;
+    const geocoding = await getGeocoding(location);
+    const weatherData = await getWeatherData(geocoding, units);
+    updateDisplay(geocoding, weatherData, units);
+    errorMessage.style.display = 'none';
   } catch(error) {
-    alert('City not found.');
+    errorMessage.style.display = 'inline-block';
     return;
   }
 }
 
-async function getGeocoding() {
-  const city = document.getElementById('city').value;
-  const state = document.getElementById('state').value;
-  const country = document.getElementById('country').value;
-  let r = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&appid=${apiKey}`);
+async function getGeocoding(location) {
+  let r = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=${apiKey}`);
   r = await r.json();
   return {
     lat: r[0].lat,
@@ -37,33 +37,34 @@ async function getGeocoding() {
   }
 }
 
-async function getWeatherData(geocoding) {
-  let units;
-  if (document.getElementById('units').checked) {
-    units = 'metric';
-  } else {
-    units = 'imperial';
-  }
+async function getWeatherData(geocoding, units) {
   let r = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geocoding.lat}&lon=${geocoding.lon}&units=${units}&appid=${apiKey}`);
   r = await r.json();
   return {
     weatherType: r.weather[0].main,
+    weatherDescription: r.weather[0].description,
     temp: Math.round(r.main.temp),
     feelsLike: Math.round(r.main.feels_like),
     humidity: r.main.humidity
   }
 }
 
-function updateDisplay(geocoding, weatherData) {
+function updateDisplay(geocoding, weatherData, units) {
   document.querySelector('.weather').style.display = 'inline-block';
-  document.querySelector('.temp').textContent = `Temp: ${weatherData.temp}°`;
-  document.querySelector('.feelsLike').textContent = `Feels Like: ${weatherData.feelsLike}°`;
+  if (units === 'imperial') {
+    units = 'F';
+  } else {
+    units = 'C';
+  }
+  document.querySelector('.weatherDescription').textContent = weatherData.weatherDescription;
+  document.querySelector('.temp').textContent = `${weatherData.temp}°${units}`;
+  document.querySelector('.feelsLike').textContent = `Feels Like: ${weatherData.feelsLike}°${units}`;
   document.querySelector('.humidity').textContent = `Humidity: ${weatherData.humidity}%`;
   const location = document.querySelector('.location');
   if (geocoding.country !== 'US') {
     location.textContent = `${geocoding.city}, ${geocoding.country}`;
   } else {
-    location.textContent = `${geocoding.city}, ${geocoding.state} ${geocoding.country}`;
+    location.textContent = `${geocoding.city}, ${geocoding.state}, ${geocoding.country}`;
   }
   const weatherType = document.querySelector('.weatherType');
   switch(weatherData.weatherType) {
@@ -95,4 +96,16 @@ function updateDisplay(geocoding, weatherData) {
       weatherType.src = 'images/cloudy.svg';
       break;
   }
+}
+
+function toggleUnits() {
+  const units = document.getElementById('units');
+  if (units.className ==='imperial') {
+    units.textContent = 'Display °F';
+    units.className = 'metric';
+  } else {
+    units.textContent = 'Display °C';
+    units.className = 'imperial';
+  }
+  main(document.querySelector('.location').textContent);
 }
