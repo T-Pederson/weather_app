@@ -1,7 +1,7 @@
 // Set up global variables and event listeners
 const apiKey = 'ef3d247a1b61d1160024768943d53ab9';
 const errorMessage = document.getElementById('errorMessage');
-const input = document.getElementById('location');
+const input = document.getElementById('locationSearch');
 const unitToggle = document.getElementById('units');
 unitToggle.addEventListener('click', toggleUnits);
 input.addEventListener('keydown', (e) => {

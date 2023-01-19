@@ -1,60 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 * {
   margin: 0;
+  padding: 0;
   color: white;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: montserrat;
 }
 
 body {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
   width: 100vw;
   height: 100vh;
   background-image: url("images/background.jpeg");
   background-size: cover;
-  background-position: center;
+  background-position: 70%;
+}
+
+#content {
+  display: flex;
+  justify-content: space-between;
+  width: 95vw;
+  height: 95vh;
+}
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location {
+  font-size: 2em;
+}
+
+.temp {
+  font-weight: bold;
+  font-size: 4em;
+}
+
+.weatherDescription {
+  text-transform: capitalize;
+  font-size: 1.5em;
+}
+
+.weatherType {
+  height: 64px;
+  width: 64px;
+}
+
+#units {
+  cursor: pointer;
+  width: fit-content;
 }
 
 input {
-  width: 200px;
   background: none;
   outline: 0;
   border-width: 0 0 2px;
   border-color: white;
+  font-size: 1.2em;
+  width: fit-content;
 }
 
 input::placeholder, a {
   color: white;
 }
 
-#units {
-  cursor: pointer;
-}
-
-.weather {
-  width: 200px;
-}
-
 #errorMessage {
-  width: 230px;
   display: none;
 }
 
-#errorMessage, #units {
-  font-size: 0.8em;
+.miscWeather {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 1.3em;
 }
 
 #footer {
+  display: grid;
+  gap: 8px;
   text-align: center;
-  position: fixed;
+  position: absolute;
   bottom: 0;
-}
-
-.weatherDescription {
-  text-transform: capitalize;
-}
-
-p {
-  margin: 0.5em;
+  margin-bottom: 2.5vh;
 }

@@ -9,20 +9,24 @@
   <script src="index.js" defer></script>
 </head>
 <body>
-  <input type="text" name="location" id="location" placeholder="Search Location..." required autocomplete="off">
-  <div id="errorMessage">
-    <p>Location not found.</p>
-    <p>Please search "City", "City, Country", or "City, State, US"</p>
-  </div>
-  <div class="weather">
-    <img src="" alt="Weather Type" class="weatherType" onerror="this.style.display = 'none'">
-    <p class="weatherDescription"></p>
-    <p class="temp"></p>
-    <p class="feelsLike"></p>
-    <p class="humidity"></p>
-    <p class="windSpeed"></p>
-    <p class="location"></p>
-    <p id="units" class="imperial">Display °C</p>
+  <div id="content">
+    <div class="weather">
+      <p class="location"></p>
+      <p class="temp"></p>
+      <p class="weatherDescription"></p>
+      <img src="" alt="Weather Type" class="weatherType">
+      <input type="text" name="locationSearch" id="locationSearch" placeholder="Search Location..." required autocomplete="off">
+      <p id="units" class="imperial">Display °C</p>
+      <div id="errorMessage">
+        <p>Location not found.</p>
+        <p>Please search "City", "City, Country", or "City, State, US"</p>
+      </div>
+    </div>
+    <div class="miscWeather">
+      <p class="feelsLike"></p>
+      <p class="humidity"></p>
+      <p class="windSpeed"></p>
+    </div>
   </div>
   <div id="footer">
     <p><a href="https://github.com/T-Pederson">© Tyson Pederson</a></p>
