@@ -30,7 +30,7 @@ async function main(location) {
 
 // Get location information via geocoding api
 async function getGeocoding(location) {
-  let r = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=${apiKey}`, {mode: 'cors'});
+  let r = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&appid=${apiKey}`, {mode: 'cors'});
   r = await r.json();
   return {
     lat: r[0].lat,
